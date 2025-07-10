@@ -8,7 +8,7 @@ from pathlib import Path
 sys.path.insert(0, '.')
 
 # Set environment variable
-os.environ["GOOGLE_API_KEY"] = "AIzaSyAG2etNNhF0jFo7mUC847JqcPzdCLid7Tw"
+os.environ["GOOGLE_API_KEY"] = "Your API key"
 
 try:
     from compiler.main import app
