@@ -103,9 +103,11 @@ def main(
     The Engineer's Intent Compiler 🚀
     Generates a Dockerfile, .dockerignore, and gitlab-ci.yml from your project's intent.
     """
+
     typer.echo(f"▶️ Starting compilation for project at: {source_path}")
 
     # 1. Check for and read requirements.txt
+
     requirements_path = source_path / "requirements.txt"
     if not requirements_path.is_file():
         typer.secho("Error: requirements.txt not found in the source directory.", fg=typer.colors.RED)
@@ -130,6 +132,7 @@ And the following files in its root directory:
 """
 
     # 2. Set up Gemini Client
+
     api_key = os.getenv("GOOGLE_API_KEY")
     if not api_key:
         typer.secho("Error: GOOGLE_API_KEY environment variable not set.", fg=typer.colors.RED)
@@ -144,9 +147,13 @@ And the following files in its root directory:
         "gitlab-ci.yml": prompts.GITLAB_CI_PROMPT,
     }
 
+
     for filename, prompt in file_generation_tasks.items():
         typer.echo(f"⏳ Generating {filename}...")
-        generated_content = generate_from_prompt(model, prompt, full_context)
+        try:
+            generated_content = generate_from_prompt(model, prompt, full_context)
+        except Exception as e:
+            continue
         
         # Additional cleanup based on filename
         if filename.lower() == "dockerfile":
@@ -166,3 +173,7 @@ And the following files in its root directory:
         typer.secho(f"✅ Successfully created {filename} at {output_path}", fg=typer.colors.GREEN)
 
     typer.secho("\n🎉 Compilation complete!", fg=typer.colors.BRIGHT_GREEN, bold=True)
+
+# Ensure Typer CLI runs when script is executed directly
+if __name__ == "__main__":
+    app()

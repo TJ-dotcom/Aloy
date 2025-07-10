@@ -81,7 +81,7 @@ export GOOGLE_API_KEY="your-actual-api-key-here"
 ### Step 3: Run It On Your Project
 
 ```bash
-python -m compiler.main /path/to/your/python-project
+python -m compiler.main .
 ```
 
 **Optional:**
