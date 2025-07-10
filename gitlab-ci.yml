@@ -1,0 +1,31 @@
+stages:
+  - build
+  - push
+
+# Use a specific, stable version of the Docker-in-Docker image and service
+# to ensure consistent and reliable pipeline execution.
+image: docker:20.10.17
+
+services:
+  - docker:20.10.17-dind
+
+build_docker_image:
+  stage: build
+  script:
+    # Build the Docker image and tag it with the unique commit SHA.
+    # $CI_REGISTRY_IMAGE is a predefined variable that resolves to the project's container registry URL.
+    - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA .
+
+push_docker_image:
+  stage: push
+  before_script:
+    # Log in to the GitLab Container Registry using predefined CI/CD variables.
+    # These variables are automatically provided by the GitLab Runner.
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  script:
+    # Push the image that was built in the 'build' stage.
+    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+  rules:
+    # This rule ensures the push job only runs on the 'main' branch,
+    # preventing feature branches from being pushed to the registry.
+    - if: '$CI_COMMIT_BRANCH == "main"'

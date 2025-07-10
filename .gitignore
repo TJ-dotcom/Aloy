@@ -1,0 +1,15 @@
+venv/
+.venv/
+env/
+__pycache__/
+*.pyc
+.env
+build/
+dist/
+.git/
+.github/
+.idea/
+.vscode/
+.DS_Store
+*.egg-info/
+Dockerfile
