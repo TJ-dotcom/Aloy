@@ -1,3 +1,2 @@
 google-generativeai
 typer[all]
-customtkinter
